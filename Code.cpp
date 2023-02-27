@@ -106,11 +106,12 @@ void ChangeData() {
 		delete[] students;
 		return;
 	}
+	string chName;
+	int change;
+	bool check;
 	cin.ignore(); //для избежания попадания лишних символов в потов ввода
 	while (true) {
-		string chName;
-		int change;
-		bool check = 0;
+		check = 0;
 		SetConsoleCP(1251);
 		cout << "Введите ФИО студента, данные о котором вы ходите изменить, или выход, чтобы завершить изменения: ";
 		getline(cin, chName);
