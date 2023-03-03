@@ -388,7 +388,7 @@ void ShowID() {
 }
 int main() {
 	setlocale(0, "");
-	int menu;
+	char menu;
 	while (true) {
 		cout << "\t\tМеню\n"
 			<< "1 - Создание новой записи о студенте.\n"
@@ -402,56 +402,56 @@ int main() {
 			<< "0 - Выйти из программы\n"
 			<< "Выберите пункт меню: ";
 		cin >> menu;
-		if (menu == 0)
-			break;
 		switch (menu) {
-		case 1:
+		case '1':
 			system("cls");
 			CreateProfile();
 			system("pause");
 			system("cls");
 			break;
-		case 2:
+		case '2':
 			system("cls");
 			ChangeData();
 			system("cls");
 			break;
-		case 3:
+		case '3':
 			system("cls");
 			ShowData();
 			system("pause");
 			system("cls");
 			break;
-		case 4:
+		case '4':
 			system("cls");
 			ShowGroup();
 			system("pause");
 			system("cls");
 			break;
-		case 5:
+		case '5':
 			system("cls");
 			ShowTop();
 			system("pause");
 			system("cls");
 			break;
-		case 6:
+		case '6':
 			system("cls");
 			CountSex();
 			system("pause");
 			system("cls");
 			break;
-		case 7:
+		case '7':
 			system("cls");
 			ShowByGrades();
 			system("pause");
 			system("cls");
 			break;
-		case 8:
+		case '8':
 			system("cls");
 			ShowID();
 			system("pause");
 			system("cls");
 			break;
+		case '0':
+			return 0;
 		default:
 			cout << "Пункт меню выбран неправильно!\n";
 			system("pause");
