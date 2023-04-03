@@ -9,7 +9,7 @@ struct Student {
 	string sex;
 	int group;
 	int ID;
-	int grades[8];
+	unsigned grades[8];
 	float average;
 };
 void CreateProfile() {
@@ -25,8 +25,14 @@ void CreateProfile() {
 	cout << "Номер в списке группы: ";
 	cin >> profile.ID;
 	cout << "Оценки за семестр:\n";
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 8; i++) {
 		cin >> profile.grades[i];
+		Mcr: if (profile.grades[i] > 5 || profile.grades[i] < 1) {
+			cout << "Введена неверная оценка. Введите ещё раз: ";
+			cin >> profile.grades[i];
+			goto Mcr;
+		}
+	}
 	int temp = 0;
 	for (int i = 0; i < 8; i++) {
 		if (profile.grades[i] == 2)
@@ -104,24 +110,20 @@ void ChangeData() {
 	CreateMassStudents(students, size);
 	if (size == 0) {
 		delete[] students;
+		system("pause");
 		return;
 	}
 	string chName;
 	int change;
-	bool check;
-	cin.ignore(); //для избежания попадания лишних символов в потов ввода
+	cin.ignore();
+	SetConsoleCP(1251);
 	while (true) {
-		check = 0;
-		SetConsoleCP(1251);
 		cout << "Введите ФИО студента, данные о котором вы ходите изменить, или выход, чтобы завершить изменения: ";
 		getline(cin, chName);
-		if (chName == "выход") {
-			delete[] students;
-			return;
-		}
+		if (chName == "выход")
+			break;
 		for (int i = 0; i < size; i++) {
 			if (students[i].name == chName) {
-				check = 1;
 				cout << "Что вы ходите изменить?\n" <<
 					"1 - ФИО.\n" <<
 					"2 - Пол.\n" <<
@@ -134,28 +136,38 @@ void ChangeData() {
 				switch (change) {
 				case 1:
 					cout << "Введите новые данные: ";
+					cin.ignore();
 					getline(cin, students[i].name);
 					break;
 				case 2:
 					cout << "Введите новые данные: ";
-					getline(cin, students[i].sex);
+					cin >> students[i].sex;
+					cin.ignore();
 					break;
 				case 3:
 					cout << "Введите новые данные: ";
 					cin >> students[i].group;
+					cin.ignore();
 					break;
 				case 4:
 					cout << "Введите новые данные: ";
 					cin >> students[i].ID;
+					cin.ignore();
 					break;
 				case 5:
 					cout << "Введите новые данные:\n";
-					for (int j = 0; j < 8; j++)
+					for (int j = 0; j < 8; j++) {
 						cin >> students[i].grades[j];
+						Mch: if (students[i].grades[j] > 5 || students[i].grades[j] < 1) {
+							cout << "Введена неверная оценка. Введите ещё раз: ";
+							cin >> students[i].grades[j];
+							goto Mch;
+						}
+					}
+					cin.ignore();
 					break;
 				case 0:
-					check = 0;
-					cin.ignore(); //для избежания попадания лишних символов в потов ввода
+					cin.ignore();
 					break;
 				}
 				break;
@@ -163,32 +175,28 @@ void ChangeData() {
 			if (i == (size - 1))
 				cout << "Данный студент не найден!\n";
 		}
-		if (check == 1) {
-			ofstream database;
-			database.open(path);
-			if (!database.is_open()) {
-				cout << "Ошибка открытия файла!\n";
-				cin.ignore(); //для избежания попадания лишних символов в потов ввода
-			}
-			else {
-				for (Student* p = students; p < students + size; p++) {
-					database << p->name << "\n" << p->sex << "\n" << p->group << "\n" << p->ID << "\n";
-					for (int i = 0; i < 8; i++) {
-						if (i == 7)
-							database << p->grades[i];
-						else
-							database << p->grades[i] << " ";
-					}
-					database << "\n";
-				}
-			}
-			database.close();
-			cout << "Сохранение успешно завершено!\n";
-			cin.ignore(); //для избежания попадания лишних символов в потов ввода
-		}
-		SetConsoleCP(866);
-		system("pause");
 	}
+	ofstream database;
+	database.open(path);
+	if (!database.is_open()) {
+		cout << "Ошибка открытия файла!\n";
+	}
+	else {
+		for (Student* p = students; p < students + size; p++) {
+			database << p->name << "\n" << p->sex << "\n" << p->group << "\n" << p->ID << "\n";
+			for (int i = 0; i < 8; i++) {
+				if (i == 7)
+					database << p->grades[i];
+				else
+					database << p->grades[i] << " ";
+			}
+			database << "\n";
+		}
+	}
+	database.close();
+	cout << "Сохранение успешно завершено!\n";
+	SetConsoleCP(866);
+	system("pause");
 	delete[] students;
 }
 void ShowData() {
@@ -456,6 +464,7 @@ int main() {
 			cout << "Пункт меню выбран неправильно!\n";
 			system("pause");
 			system("cls");
+			cin.ignore();
 		}
 	}
 }
